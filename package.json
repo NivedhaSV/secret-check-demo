@@ -1,0 +1,16 @@
+{
+  "name": "secret-check-demo",
+  "version": "1.0.0",
+  "description": "A pre-commit hook to check for secrets in staged files",
+  "main": "check-secrets.js",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
+}
