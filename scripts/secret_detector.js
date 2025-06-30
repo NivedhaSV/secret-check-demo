@@ -2,44 +2,26 @@ const fs = require('fs');
 const { execSync } = require('child_process');
 
 // Regex patterns for common secrets
-const SECRET_PATTERNS = [
-    // AWS Keys
-    /AKIA[0-9A-Z]{16,40}/, // AWS Access Key
-  
-    // Google Cloud Keys
-    /AIza[0-9A-Za-z-_]{35}/, // Google API Key
-  
-    // Azure Keys
-    /([A-Za-z0-9]{32})\-([A-Za-z0-9]{16})\-([A-Za-z0-9]{24})/, // Azure Storage Account Key
-  
-    // GitHub Token Patterns
-    /ghp_[A-Za-z0-9]{36}/, // GitHub Personal Access Token
-  
-    // Slack Tokens
-    /xox[baprs]-([0-9A-Za-z]{10,48})/, // Slack OAuth token
-  
-    // Twilio API Keys
-    /SK[0-9a-fA-F]{32}/, // Twilio API Key
-  
-    // Stripe Secret Keys
-    /sk_live_[0-9a-zA-Z]{24}/, // Stripe API Secret Key
-  
-    // Firebase API Keys
-    /AIza[0-9A-Za-z-_]{35}/, // Firebase API Key
-  
-    // Docker Hub Token
-    // /[A-Za-z0-9]{30}/, // Docker Hub Access Token
-  
-    // Generic Base64 encoded secrets (e.g., tokens)
-    // /[A-Za-z0-9+\/=]{32,}/, // Base64 Token Pattern
-  
-    // Miscellaneous sensitive data (e.g., passwords, JWTs)
-    /(?:eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,})/, // JWT Token Pattern
-    /password[\s]*=[\s]*['"][^'"]{8,}['"]/i, // Password Pattern
-  
-    // OAuth tokens
-    // /[A-Za-z0-9_-]{35,}/, // Generic OAuth Token
-  ];
+const SECRET_PATTERNS = {
+    // Cloud Provider Keys
+    AWS_ACCESS_KEY: /AKIA[0-9A-Z]{16}/,
+    AWS_SECRET_KEY: /[0-9a-zA-Z/+]{40}/,
+    AZURE_KEY: /[0-9a-zA-Z]{32}-[0-9a-zA-Z]{16}-[0-9a-zA-Z]{24}/,
+    
+    // Authentication & API Keys
+    API_KEY: /(api[_-]?key|apikey|api[_-]?secret)[\s=:]+["']?[\w-]{16,}["']?/i,
+    JWT_TOKEN: /eyJ[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*/,
+    PRIVATE_KEY: /-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY(?:\s+BLOCK)?-----/,
+    
+    // Database Connection Strings
+    MONGODB_URI: /mongodb(?:\+srv)?:\/\/[^:]+:[^@]+@[^/]+\/[\w-]+/i,
+    POSTGRES_URI: /postgres(?:ql)?:\/\/[^:]+:[^@]+@[^/]+\/[\w-]+/i,
+    
+    // OAuth & Platform Keys
+    GITHUB_TOKEN: /gh[ps]_[0-9a-zA-Z]{36}/,
+    GOOGLE_API_KEY: /AIza[0-9A-Za-z-_]{35}/,
+    STRIPE_KEY: /(?:sk|pk)_(?:test|live)_[0-9a-zA-Z]{24}/
+};
 
 function getStagedFiles() {
     try {
@@ -61,7 +43,7 @@ function checkFileForSecrets(filePath) {
         const findings = [];
 
         // Check each pattern
-        for (const [secretType, pattern] of SECRET_PATTERNS) {
+        for (const [secretType, pattern] of Object.entries(SECRET_PATTERNS)) {
             const matches = content.match(pattern);
             if (matches) {
                 findings.push({
