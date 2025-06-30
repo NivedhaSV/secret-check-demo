@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { execSync } = require('child_process');
 
+
 // Regex patterns for common secrets
 const SECRET_PATTERNS = {
     AWS_ACCESS_KEY: /(?<![A-Za-z0-9])[A-Z0-9]{20}(?![A-Za-z0-9])/,
