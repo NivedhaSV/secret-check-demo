@@ -1,0 +1,10 @@
+// Will match (case insensitive):
+
+
+apiKey: "1234567890abcdef"
+API_SECRET = "1234567890abcdef"
+apisecret = 1234567890abcdef
+
+// Won't match:
+myapikey=123 (too short)
+notanapikey=1234567890abcdef (wrong prefix)

@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Displaying staged files:"
+echo "Running secret detection..."
+node scripts/secret_detector.js
+
+# Also display the staged files
+echo "\nStaged files:"
 git diff --cached --name-only --diff-filter=ACMR
 
