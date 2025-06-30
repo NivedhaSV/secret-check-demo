@@ -4,23 +4,25 @@ This repository includes a pre-commit hook that checks for secrets in staged fil
 
 ## Prerequisites
 
-- Node.js
-- Python (for detect-secrets)
+- Python (for pre-commit and detect-secrets)
 - Git
 
 ## Installation
 
-1. Install Node.js dependencies:
+1. Install pre-commit and detect-secrets:
    ```bash
-   npm install
+   pip install pre-commit detect-secrets
    ```
 
-2. Install detect-secrets:
+2. Install the pre-commit hooks:
    ```bash
-   pip install detect-secrets
+   pre-commit install
    ```
 
-The pre-commit hook will be automatically installed when you run `npm install` thanks to the `prepare` script.
+3. Generate a baseline (if not already present):
+   ```bash
+   detect-secrets scan > .secrets.baseline
+   ```
 
 ## How it Works
 
@@ -34,9 +36,9 @@ When you try to make a commit, the pre-commit hook will:
 
 ## Troubleshooting
 
-If you get an error about `detect-secrets` not being installed, make sure to install it using:
+If you get an error about `pre-commit` or `detect-secrets` not being installed, make sure to install them using:
 ```bash
-pip install detect-secrets
+pip install pre-commit detect-secrets
 ```
 
 ## Bypassing the Hook

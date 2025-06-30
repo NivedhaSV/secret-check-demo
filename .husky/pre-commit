@@ -1,4 +1,3 @@
-
 echo "🔐 Running detect-secrets..."
 
 # Stash changes for staged files only
@@ -9,8 +8,8 @@ if [ -z "$FILES" ]; then
   exit 0
 fi
 
-# Scan only staged files
-detect-secrets-hook --baseline .secrets.baseline $FILES
+# Scan only staged files using detect-secrets scan
+detect-secrets scan $FILES
 
 if [ $? -ne 0 ]; then
   echo "❌ Potential secrets detected! Commit aborted."
