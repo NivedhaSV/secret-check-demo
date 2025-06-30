@@ -1,7 +1,7 @@
 // Will match (case insensitive):
 
 
-apiKey: "1234567890abcdef"
+hello: "1234567890abcdef"
 API_SECRET = "1234567890abcdef"
 apisecret = 1234567890abcdef
 
