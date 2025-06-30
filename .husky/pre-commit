@@ -1,1 +1,6 @@
-echo "Running pre-commit checks..."
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Displaying staged files:"
+git diff --cached --name-only --diff-filter=ACMR
+
