@@ -3,6 +3,6 @@ echo "Running secret detection..."
 node scripts/secret_detector.js
 
 # Also display the staged files
-echo "\nStaged files:"
+echo "Staged files:"
 git diff --cached --name-only --diff-filter=ACMR
 
